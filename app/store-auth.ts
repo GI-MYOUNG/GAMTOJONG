@@ -1,0 +1,3 @@
+import {auth,authConfigured} from '../auth';
+export async function getStoreUser(){if(!authConfigured)return null;const session=await auth();if(!session?.user?.id||!session.user.email)return null;return {userId:session.user.id,email:session.user.email,displayName:session.user.name||session.user.email,fullName:session.user.name||null};}
+export function safeReturnTo(input:unknown){if(typeof input!=='string'||!input.startsWith('/')||input.startsWith('//'))return '/';try{const url=new URL(input,'https://local.invalid');if(url.origin!=='https://local.invalid'||['/login','/logout'].includes(url.pathname)||url.pathname.startsWith('/api/auth'))return '/';return url.pathname+url.search+url.hash;}catch{return '/';}}
